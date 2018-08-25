@@ -20,3 +20,6 @@ sudo yum install azure-cli
 
 #test Azure CLI
 az login 
+
+#Maven
+sudo yum install mvm
