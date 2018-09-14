@@ -1,0 +1,4 @@
+version: '2'
+services:
+  kibana:
+    image: docker.elastic.co/logstash/logstash:6.4.0

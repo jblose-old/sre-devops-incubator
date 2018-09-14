@@ -20,13 +20,11 @@ services:
     mem_limit: 1g
   # Graylog: https://hub.docker.com/r/graylog/graylog/
   graylog:
-    image: graylog/graylog:2.4.0-1
+    image: graylog/graylog:2.4
     environment:
-      # CHANGE ME!
-      - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
-      # Password: admin
+      - GRAYLOG_PASSWORD_SECRET=9y6X9TkFJzE&2YtH
       - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
-      - GRAYLOG_WEB_ENDPOINT_URI=http://127.0.0.1:9000/api
+      - GRAYLOG_WEB_ENDPOINT_URI=http://23.101.143.91:9000/api
     links:
       - mongodb:mongo
       - elasticsearch
@@ -44,3 +42,5 @@ services:
       - 12201:12201
       # GELF UDP
       - 12201:12201/udp
+#docker run --name graylog --link mongo --link elasticsearch -p 9000:9000 -p 12201:12201 -p 12201:12201/udp -p 514:514 -p 514:514/udp -e GRAYLOG_WEB_ENDPOINT_URI="http://23.101.143.91:9000/api" -d graylog/graylog:2.4
+      
