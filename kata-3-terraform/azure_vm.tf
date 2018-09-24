@@ -1,6 +1,8 @@
 variable "az_env" {}
 variable "az_suffix" {}
 variable "az_vm_index" {}
+variable "az_vm_admin_user" {}
+variable "az_vm_admin_pass" {}
 
 resource "azurerm_resource_group" "vm" {
     name = "${var.az_env}-${var.az_suffix}"
@@ -55,8 +57,41 @@ resource "azurerm_network_interface" "vm" {
   }
 }
 
-# resource "azurerm_virtual_machine" "vm" {
-#     name = "centos0${var.az_vm_index}-${var.az_suffix}"
-#     location = "${azurerm_resource_group.vm.location}"
-#     resource_group_name = "${azurerm_resource_group.vm.name}"
-# }
+resource "azurerm_virtual_machine" "vm" {
+    name = "centos${var.az_vm_index}-${var.az_suffix}"
+    location = "${azurerm_resource_group.vm.location}"
+    resource_group_name = "${azurerm_resource_group.vm.name}"
+    network_interface_ids = ["${azurerm_network_interface.vm.id}"]
+    vm_size = "Standard_B2s"
+
+    delete_os_disk_on_termination = true
+    delete_data_disks_on_termination = true
+
+    storage_image_reference {
+        publisher = "OpenLogic"
+        offer = "CentOS"
+        sku = "7.3"
+        version = "latest"            
+    }
+
+    storage_os_disk {
+        name = "centos${var.az_vm_index}-disk-${var.az_suffix}"
+        caching = "ReadWrite"
+        create_option = "FromImage"
+        managed_disk_type = "Standard_LRS"
+    }
+
+    os_profile {
+        computer_name = "centos${var.az_vm_index}"
+        admin_username = "${var.az_vm_admin_user}"
+        admin_password = "${var.az_vm_admin_pass}"
+    }
+
+    os_profile_linux_config {
+        disable_password_authentication = false
+    }
+
+    tags {
+        environment = "${var.az_env}"
+    }
+}
