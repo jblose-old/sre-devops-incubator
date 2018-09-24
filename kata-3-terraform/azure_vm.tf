@@ -1,10 +1,10 @@
 variable "az_env" {}
 variable "az_suffix" {}
-variable "az_vm_index" {}
-variable "az_vm_admin_user" {}
-variable "az_vm_admin_pass" {}
+variable "az_centos_index" {}
+variable "az_centos_admin_user" {}
+variable "az_centos_admin_pass" {}
 
-resource "azurerm_resource_group" "vm" {
+resource "azurerm_resource_group" "centos" {
     name = "${var.az_env}-${var.az_suffix}"
     location = "eastus"
     
@@ -13,43 +13,44 @@ resource "azurerm_resource_group" "vm" {
     }
 }
 
-resource "azurerm_virtual_network" "vm" {
+resource "azurerm_virtual_network" "centos" {
     name = "${var.az_env}-vn-${var.az_suffix}"
     address_space = ["172.31.0.0/16"]
-    location = "${azurerm_resource_group.vm.location}"
-    resource_group_name = "${azurerm_resource_group.vm.name}"
+    location = "${azurerm_resource_group.centos.location}"
+    resource_group_name = "${azurerm_resource_group.centos.name}"
 }
 
-resource "azurerm_subnet" "vm" {
-    name = "${var.az_env}-vn-sub${var.az_vm_index}-${var.az_suffix}"
-    resource_group_name = "${azurerm_resource_group.vm.name}"
-    virtual_network_name = "${azurerm_virtual_network.vm.name}"
+resource "azurerm_subnet" "centos" {
+    name = "${var.az_env}-vn-sub${var.az_centos_index}-${var.az_suffix}"
+    resource_group_name = "${azurerm_resource_group.centos.name}"
+    virtual_network_name = "${azurerm_virtual_network.centos.name}"
     address_prefix = "172.31.2.0/24"
 }
 
-resource "azurerm_public_ip" "vm" {
-    name = "${var.az_env}-vm${var.az_vm_index}-ip"
-    location = "${azurerm_resource_group.vm.location}"
-    resource_group_name = "${azurerm_resource_group.vm.name}"
+resource "azurerm_public_ip" "centos" {
+    name = "${var.az_env}-centos${var.az_centos_index}-ip"
+    location = "${azurerm_resource_group.centos.location}"
+    resource_group_name = "${azurerm_resource_group.centos.name}"
     public_ip_address_allocation = "static"
     idle_timeout_in_minutes = 30
-    
+    domain_name_label = "centos${var.az_centos_index}-${var.az_suffix}"
+
     tags {
         environment = "${var.az_env}"        
     }
 
 }
 
-resource "azurerm_network_interface" "vm" {
-  name = "${var.az_env}-vn-sub${var.az_vm_index}-nic-${var.az_suffix}"
-  location = "${azurerm_resource_group.vm.location}"
-  resource_group_name = "${azurerm_resource_group.vm.name}"
+resource "azurerm_network_interface" "centos" {
+  name = "centos${var.az_centos_index}-${var.az_env}-vn-nic-${var.az_suffix}"
+  location = "${azurerm_resource_group.centos.location}"
+  resource_group_name = "${azurerm_resource_group.centos.name}"
 
   ip_configuration {
-    name = "${var.az_env}-vn-sub${var.az_vm_index}-nic-ipconf-${var.az_suffix}"
-    subnet_id = "${azurerm_subnet.vm.id}"
+    name = "centos${var.az_centos_index}-${var.az_env}-vn-nic-ipconf-${var.az_suffix}"
+    subnet_id = "${azurerm_subnet.centos.id}"
     private_ip_address_allocation = "dynamic"
-    public_ip_address_id = "${azurerm_public_ip.vm.id}"
+    public_ip_address_id = "${azurerm_public_ip.centos.id}"
   }
 
   tags {
@@ -57,11 +58,11 @@ resource "azurerm_network_interface" "vm" {
   }
 }
 
-resource "azurerm_virtual_machine" "vm" {
-    name = "centos${var.az_vm_index}-${var.az_suffix}"
-    location = "${azurerm_resource_group.vm.location}"
-    resource_group_name = "${azurerm_resource_group.vm.name}"
-    network_interface_ids = ["${azurerm_network_interface.vm.id}"]
+resource "azurerm_virtual_machine" "centos" {
+    name = "centos${var.az_centos_index}"
+    location = "${azurerm_resource_group.centos.location}"
+    resource_group_name = "${azurerm_resource_group.centos.name}"
+    network_interface_ids = ["${azurerm_network_interface.centos.id}"]
     vm_size = "Standard_B2s"
 
     delete_os_disk_on_termination = true
@@ -75,16 +76,16 @@ resource "azurerm_virtual_machine" "vm" {
     }
 
     storage_os_disk {
-        name = "centos${var.az_vm_index}-disk-${var.az_suffix}"
+        name = "centos${var.az_centos_index}-disk-${var.az_suffix}"
         caching = "ReadWrite"
         create_option = "FromImage"
         managed_disk_type = "Standard_LRS"
     }
 
     os_profile {
-        computer_name = "centos${var.az_vm_index}"
-        admin_username = "${var.az_vm_admin_user}"
-        admin_password = "${var.az_vm_admin_pass}"
+        computer_name = "centos${var.az_centos_index}"
+        admin_username = "${var.az_centos_admin_user}"
+        admin_password = "${var.az_centos_admin_pass}"
     }
 
     os_profile_linux_config {
