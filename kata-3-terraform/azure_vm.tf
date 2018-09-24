@@ -38,7 +38,6 @@ resource "azurerm_public_ip" "centos" {
     tags {
         environment = "${var.az_env}"        
     }
-
 }
 
 resource "azurerm_network_interface" "centos" {
