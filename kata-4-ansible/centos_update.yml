@@ -1,5 +1,5 @@
 ---
-- hosts: ceontos
+- hosts: centos_vms
   tasks:
   - name: upgrade all packages
     yum:
