@@ -1,7 +1,8 @@
 ---
-- hosts: all
-	tasks:
-	- name: upgrade all packages
-		yum:
-			name: '*'
-			state: latest
+- hosts: ceontos
+  tasks:
+  - name: upgrade all packages
+    yum:
+      name: '*'
+      state: latest
+
