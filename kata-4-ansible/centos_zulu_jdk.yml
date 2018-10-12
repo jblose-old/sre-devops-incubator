@@ -1,11 +1,20 @@
 ---
-- hosts: centos_vms
+- name: Install Azul Zulu JDK
+  hosts: centos_vms
   tasks:
-  - name: List Zulu packages
+  - name: Add RPM Key for Repo
+    rpm_key:
+      state: present
+      key: http://repos.azulsystems.com/RPM-GPG-KEY-azulsystems
+  - name: Add Azul Package to Yum repos
+    get_url:
+      url: http://repos.azulsystems.com/rhel/zulu.repo
+      dest: /etc/yum.repos.d/zulu.repo
+  - name: List Zulu pkgs
     yum:
       name: zulu
     register: result
-  - name: Install Zulu JDK
+  - name: Zulu JDK
     yum:
       name: zulu-8
       state: latest
