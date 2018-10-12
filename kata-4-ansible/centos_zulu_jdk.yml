@@ -1,0 +1,8 @@
+---
+- hosts: centos_vms
+  tasks:
+  - name: Install Zulu JDK
+    yum:
+      name: zulu-8
+      state: latest
+    become: yes
