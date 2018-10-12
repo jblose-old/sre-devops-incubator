@@ -1,6 +1,10 @@
 ---
 - hosts: centos_vms
   tasks:
+  - name: List Zulu packages
+    yum:
+      name: zulu
+    register: result
   - name: Install Zulu JDK
     yum:
       name: zulu-8
