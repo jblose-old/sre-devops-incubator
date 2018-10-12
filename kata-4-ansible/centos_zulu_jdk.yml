@@ -6,6 +6,7 @@
     rpm_key:
       state: present
       key: http://repos.azulsystems.com/RPM-GPG-KEY-azulsystems
+    become: yes
   - name: Add Azul Package to Yum repos
     get_url:
       url: http://repos.azulsystems.com/rhel/zulu.repo
