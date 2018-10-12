@@ -3,4 +3,4 @@
   hosts: centos_vms
   roles: 
     - role: elastic.elasticsearch
-      es_isntance_name: "node-01"
+      es_instance_name: "node-01"
