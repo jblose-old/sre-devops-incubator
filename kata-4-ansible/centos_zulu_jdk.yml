@@ -12,11 +12,7 @@
       url: http://repos.azulsystems.com/rhel/zulu.repo
       dest: /etc/yum.repos.d/zulu.repo
     become: yes
-  - name: List Zulu pkgs
-    yum:
-      name: zulu
-    register: result
-  - name: Zulu JDK
+  - name: Install Zulu JDK
     yum:
       name: zulu-8
       state: latest
