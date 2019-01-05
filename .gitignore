@@ -1,3 +1,8 @@
 install.sh
 */.terraform
 *tfstate*
+kata-4-ansible/etc-ansible/ansible.cfg
+kata-4-ansible/etc-ansible/hosts
+kata-4-ansible/ssh/id_rsa
+kata-4-ansible/ssh/id_rsa.pub
+kata-4-ansible/ssh/known_hosts
