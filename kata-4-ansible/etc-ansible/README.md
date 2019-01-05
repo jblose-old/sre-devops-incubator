@@ -1,0 +1,1 @@
+Placeholder for etc/ansible/ dependencies needed for an Ansible container.

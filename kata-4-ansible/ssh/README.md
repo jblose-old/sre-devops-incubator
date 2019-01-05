@@ -1,0 +1,1 @@
+Placeholder for ssh dependencies needed for an Ansible container.
