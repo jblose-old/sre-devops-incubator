@@ -5,7 +5,7 @@ variable "az_centos_admin_user" {}
 variable "az_centos_admin_pass" {}
 
 resource "azurerm_resource_group" "centos" {
-    name = "${var.az_env}-${var.az_suffix}"
+    name = "rg-${var.az_env}-${var.az_suffix}"
     location = "eastus"
     
     tags {
