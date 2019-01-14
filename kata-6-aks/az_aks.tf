@@ -1,6 +1,8 @@
 variable "az_env" {}
 variable "az_suffix" {}
 variable "az_service" {}
+variable "az_client_id" {}
+variable "az_client_secret" {}
 
 resource "azurerm_resource_group" "aks" {
     name = "rg-${var.az_env}-${var.az_service}-${var.az_suffix}"
@@ -13,22 +15,34 @@ resource "azurerm_resource_group" "aks" {
 }
 
 resource "azurerm_kubernetes_cluster" "aks" {
-    name = "${var.az_env}-${var.az_service}-${var.az_suffix}"
+    name = "${var.az_env}${var.az_service}${var.az_suffix}"
     location = "${azurerm_resource_group.aks.location}"
     resource_group_name = "${azurerm_resource_group.aks.name}"
     dns_prefix = "${var.az_env}-${var.az_service}-${var.az_suffix}"
 
     agent_pool_profile {
-        name = "${var.az_env}-${var.az_service}-${var.az_suffix}-default"
+        name = "${var.az_env}${var.az_service}${var.az_suffix}"
         count = 1
         vm_size = "Standard_B2s"
         os_type = "Linux"
         os_disk_size_gb = 30
     }
 
-# Need to configure Service Principal 
     service_principal {
-        client_id     = "00000000-0000-0000-0000-000000000000"
-        client_secret = "00000000000000000000000000000000"
+        client_id     = "${var.az_client_id}"
+        client_secret = "${var.az_client_secret}"
     }
+
+     tags {
+        environment = "${var.az_env}"
+        service = "${var.az_service}"     
+    }
+}
+
+output "client_certificate" {
+  value = "${azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate}"
+}
+
+output "kube_config" {
+  value = "${azurerm_kubernetes_cluster.aks.kube_config_raw}"
 }
