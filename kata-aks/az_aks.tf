@@ -51,6 +51,18 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
 }
 
+resource "azurerm_container_registry" "aks" {
+    name                     = "cr${var.az_suffix}"
+    resource_group_name      = "${azurerm_resource_group.aks.name}"
+    location                 = "${azurerm_resource_group.aks.location}"
+    sku                      = "Basic"
+    admin_enabled            = false
+
+    tags {
+        environment = "${var.az_env}"
+        service = "${var.az_service}"     
+    }
+}
 output "client_certificate" {
   value = "${azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate}"
 }
