@@ -1,8 +1,0 @@
----
-- hosts: centos_vms
-  tasks:
-  - name: upgrade all packages
-    yum:
-      name: '*'
-      state: latest
-    become: yes
