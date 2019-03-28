@@ -16,7 +16,7 @@ resource "azurerm_resource_group" "aks" {
 resource "azurerm_public_ip" "aks" {
     name = "ip-${var.az_env}-${var.az_service}-${var.az_suffix}"
     location = "${azurerm_resource_group.aks.location}"
-    resource_group_name = "MC_${azurerm_resource_group.aks.name}_${var.az_env}${var.az_service}${var.az_suffix}_eastus"
+    resource_group_name = "${azurerm_resource_group.aks.name}"
     allocation_method = "Static"
     idle_timeout_in_minutes = 30
     domain_name_label = "aks-${var.az_suffix}"
@@ -30,7 +30,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     location = "${azurerm_resource_group.aks.location}"
     resource_group_name = "${azurerm_resource_group.aks.name}"
     dns_prefix = "${var.az_env}-${var.az_service}-${var.az_suffix}"
-    kubernetes_version = "1.11.5"
+    kubernetes_version = "1.12.6"
 
     agent_pool_profile {
         name = "${var.az_env}${var.az_service}${var.az_suffix}"
