@@ -1,4 +1,4 @@
-# For setting up an AKS cluster it is requiered to create a Service Principle
+# For setting up an AKS cluster it is required to create a Service Principle
 # https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest
 az ad sp create-for-rbac --skip-assignment
 
