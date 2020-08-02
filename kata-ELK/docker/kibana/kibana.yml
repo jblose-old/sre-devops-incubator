@@ -1,4 +1,0 @@
-server.name: kibana.centos01-jblose.eastus.cloudapp.azure.com
-server.host: "0"
-elasticsearch.url: http://23.101.143.91:9200
-xpack.monitoring.ui.container.elasticsearch.enabled: true
