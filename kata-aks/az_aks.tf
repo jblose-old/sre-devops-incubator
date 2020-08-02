@@ -16,7 +16,7 @@ resource "azurerm_resource_group" "aks" {
 resource "azurerm_public_ip" "aks" {
     name = "ip-${var.az_env}-${var.az_service}-${var.az_suffix}"
     location = "${azurerm_resource_group.aks.location}"
-    resource_group_name = "${azurerm_resource_group.aks.name}"
+    resource_group_name = "${azurerm_kubernetes_cluster.aks.node_resource_group}"
     allocation_method = "Static"
     idle_timeout_in_minutes = 30
     domain_name_label = "aks-${var.az_suffix}"

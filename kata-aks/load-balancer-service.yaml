@@ -3,9 +3,9 @@ kind: Service
 metadata:
   name: azure-load-balancer
 spec:
-  loadBalancerIP: 23.96.105.210
+  loadBalancerIP: 137.116.119.132
   type: LoadBalancer
   ports:
-  - port: 9090
+  - port: 80
   selector:
     app: azure-load-balancer
